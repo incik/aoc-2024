@@ -115,29 +115,48 @@ func main() {
 
 	counter := 0
 
-	// scan it rows
-	for _, row := range matrix {
-		counter += scanRow(row)
-	}
+	if len(args) == 2 && args[1] == "X" {
+		// looking for X-MAS
 
-	// scan diagonals in one direction
-	diagonals := getDiagonals(matrix)
-	for _, row := range diagonals {
-		counter += scanRow(row)
-	}
+		// [i,j][_,_][i,j+2]
+		// [_,_][i+1,j+1][_,_]
+		// [i+2,j][_,_][i+2,j+2]
 
-	// reversing columns and scanning for diagonals in other direction
-	reverseColumns(matrix)
-	revDiagonals := getDiagonals(matrix)
+		for i := 0; i < len(matrix)-2; i++ {
+			for j := 0; j < len(matrix[i])-2; j++ {
+				if matrix[i+1][j+1] == 'A' &&
+					((matrix[i][j] == 'M' && matrix[i+2][j+2] == 'S') || (matrix[i][j] == 'S' && matrix[i+2][j+2] == 'M')) &&
+					((matrix[i][j+2] == 'M' && matrix[i+2][j] == 'S') || (matrix[i][j+2] == 'S' && matrix[i+2][j] == 'M')) {
+					counter += 1
+				}
+			}
+		}
+	} else {
+		// looking for XMAS
+		// scan it rows
+		for _, row := range matrix {
+			counter += scanRow(row)
+		}
 
-	for _, row := range revDiagonals {
-		counter += scanRow(row)
-	}
+		// scan diagonals in one direction
+		diagonals := getDiagonals(matrix)
+		for _, row := range diagonals {
+			counter += scanRow(row)
+		}
 
-	// rotating 90 degreese to scan the columns
-	rotate(matrix)
-	for _, row := range matrix {
-		counter += scanRow(row)
+		// reversing columns and scanning for diagonals in other direction
+		reverseColumns(matrix)
+		revDiagonals := getDiagonals(matrix)
+
+		for _, row := range revDiagonals {
+			counter += scanRow(row)
+		}
+
+		// rotating 90 degreese to scan the columns
+		rotate(matrix)
+		for _, row := range matrix {
+			counter += scanRow(row)
+		}
 	}
 
 	fmt.Println("Found ", counter)
