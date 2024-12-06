@@ -2,33 +2,14 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 	"strconv"
+
+	"adventofcode/shared"
 )
 
-func check(e error) {
-	if e != nil {
-		println("Error")
-		panic(e)
-	}
-}
-
-func invalidArguments() {
-	println("Invalid arguments")
-	println("Usage: aoc02 <input>")
-}
-
 func main() {
-	var args = os.Args[1:]
-
-	if len(args) < 1 {
-		invalidArguments()
-		return
-	}
-
-	data, err := os.ReadFile(args[0])
-	check(err)
+	data := shared.GetFileContents()
 
 	re := regexp.MustCompile(`do(n\'t)?\(\)|mul\(\d+,\d+\)`)
 	instructions := re.FindAll(data, -1)

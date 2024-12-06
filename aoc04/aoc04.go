@@ -7,19 +7,9 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+
+	"adventofcode/shared"
 )
-
-func check(e error) {
-	if e != nil {
-		println("Error")
-		panic(e)
-	}
-}
-
-func invalidArguments() {
-	println("Invalid arguments")
-	println("Usage: aoc04 <input>")
-}
 
 func scanRow(row []rune) int {
 	windowSize := 4
@@ -93,23 +83,12 @@ func getDiagonals(matrix [][]rune) [][]rune {
 }
 
 func main() {
-	var args = os.Args[1:]
-
-	if len(args) < 1 {
-		invalidArguments()
-		return
-	}
-
-	data, err := os.ReadFile(args[0])
-	check(err)
+	args := os.Args[1:]
+	data := shared.GetFileContents()
 
 	// parse file into a matrix
 	var matrix [][]rune
 	for _, row := range strings.Split(string(data), "\n") {
-		var cells []string
-		for _, cell := range strings.Split(row, "") {
-			cells = append(cells, cell)
-		}
 		matrix = append(matrix, []rune(row))
 	}
 
